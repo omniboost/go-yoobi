@@ -6,6 +6,7 @@ import (
 	"os"
 	"testing"
 
+	_ "github.com/joho/godotenv/autoload"
 	yoobi "github.com/omniboost/go-yoobi"
 )
 
