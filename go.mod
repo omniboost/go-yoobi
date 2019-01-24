@@ -1,7 +1,7 @@
 module github.com/omniboost/go-yoobi
 
 require (
-	github.com/gorilla/schema v1.0.2
+	github.com/gorilla/schema v0.0.0-20171211162101-9fa3b6af65dc
 	github.com/joho/godotenv v1.3.0
 	github.com/kr/pretty v0.1.0 // indirect
 	github.com/satori/go.uuid v1.2.0

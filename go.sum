@@ -1,3 +1,5 @@
+github.com/gorilla/schema v0.0.0-20171211162101-9fa3b6af65dc h1:ZTcKDaJOhVhscc4XgpGKLRJJXD2bk879TBpXWzHDE5A=
+github.com/gorilla/schema v0.0.0-20171211162101-9fa3b6af65dc/go.mod h1:kgLaKoK1FELgZqMAVxx/5cbj0kT+57qxUrAlIO2eleU=
 github.com/gorilla/schema v1.0.2 h1:sAgNfOcNYvdDSrzGHVy9nzCQahG+qmsg+nE8dK85QRA=
 github.com/gorilla/schema v1.0.2/go.mod h1:kgLaKoK1FELgZqMAVxx/5cbj0kT+57qxUrAlIO2eleU=
 github.com/joho/godotenv v1.3.0 h1:Zjp+RcGpHhGlrMbJzXTrZZPrWj+1vfm90La1wgB6Bhc=
