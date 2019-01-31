@@ -10,7 +10,7 @@ import (
 	yoobi "github.com/omniboost/go-yoobi"
 )
 
-func TestEmployeesGet(t *testing.T) {
+func TestProjectsGet(t *testing.T) {
 	username := os.Getenv("YOOBI_USERNAME")
 	password := os.Getenv("YOOBI_PASSWORD")
 	organisation := os.Getenv("YOOBI_ORGANISATION")
@@ -19,8 +19,8 @@ func TestEmployeesGet(t *testing.T) {
 	client.SetDebug(true)
 	client.SetDisallowUnknownFields(true)
 
-	req := client.NewEmployeesGetRequest()
-	req.QueryParams().CurrentPage = 2
+	req := client.NewProjectsGetRequest()
+	req.QueryParams().CurrentPage = 1
 
 	// req.PathParams().Date = time.Date(2018, 12, 5, 0, 0, 0, 0, time.UTC)
 	resp, err := req.Do()
