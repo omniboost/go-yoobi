@@ -422,6 +422,6 @@ type FilterParams map[string]string
 
 type Metadata struct {
 	Last        int `json:"last"`
-	Results     int `json:"results"`
+	Results     Int `json:"results"`
 	Currentpage Int `json:"currentpage"`
 }
