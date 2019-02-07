@@ -105,19 +105,19 @@ func (r *EmployeesPostRequest) SetRequestBody(body EmployeesPostRequestBody) {
 	r.requestBody = body
 }
 
-func (r *EmployeesPostRequest) NewResponseBody() *EmployeesPostResponseBody {
-	return &EmployeesPostResponseBody{}
+func (r *EmployeesPostRequest) NewResponseBody() *AppResponse {
+	return &AppResponse{}
 }
 
-type EmployeesPostResponseBody struct {
-	AppResponse
-}
+// type EmployeesPostResponseBody struct {
+// 	AppResponse
+// }
 
 func (r *EmployeesPostRequest) URL() url.URL {
 	return r.client.GetEndpointURL("employees", r.PathParams())
 }
 
-func (r *EmployeesPostRequest) Do() (EmployeesPostResponseBody, error) {
+func (r *EmployeesPostRequest) Do() (AppResponse, error) {
 	// Create http request
 	req, err := r.client.NewRequest(nil, r.Method(), r.URL(), r.RequestBody())
 	if err != nil {

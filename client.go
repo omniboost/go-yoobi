@@ -13,6 +13,7 @@ import (
 	"net/http/httputil"
 	"net/url"
 	"strings"
+	"sync"
 	"text/template"
 	"time"
 )
@@ -258,29 +259,85 @@ func (c *Client) Do(req *http.Request, responseBody interface{}) (*http.Response
 	// }
 
 	// try to decode body into interface parameter
-	if responseBody != nil {
-		dec := json.NewDecoder(httpResp.Body)
-		if c.disallowUnknownFields {
-			dec.DisallowUnknownFields()
-		}
-
-		err = dec.Decode(responseBody)
-		if err != nil && err != io.EOF {
-			// create a simple error response
-			errorResponse := &ErrorResponse{Response: httpResp}
-			// errorResponse.Errors = append(errorResponse.Errors, err)
-			return httpResp, errorResponse
-		}
+	if responseBody == nil {
+		return httpResp, nil
 	}
 
-	appResponse, ok := responseBody.(AppResponse)
+	errorResponse := &ErrorResponse{Response: httpResp}
+
+	err = c.Unmarshal(httpResp.Body, &responseBody, &errorResponse)
+	if err != nil {
+		return httpResp, err
+	}
+
+	appResponse, ok := responseBody.(*AppResponse)
 	if ok {
 		if len(appResponse.Errors) > 0 {
 			return httpResp, appResponse.Errors
 		}
 	}
 
+	if errorResponse.Err.Message != "" {
+		return httpResp, errorResponse
+	}
+
 	return httpResp, nil
+}
+
+func (c *Client) Unmarshal(r io.Reader, vv ...interface{}) error {
+	if len(vv) == 0 {
+		return nil
+	}
+
+	wg := sync.WaitGroup{}
+	wg.Add(len(vv))
+	errs := []error{}
+	writers := make([]io.Writer, len(vv))
+
+	for i, v := range vv {
+		pr, pw := io.Pipe()
+		writers[i] = pw
+
+		go func(i int, v interface{}, pr *io.PipeReader, pw *io.PipeWriter) {
+			dec := json.NewDecoder(pr)
+			if c.disallowUnknownFields {
+				dec.DisallowUnknownFields()
+			}
+
+			err := dec.Decode(v)
+			if err != nil {
+				errs = append(errs, err)
+			}
+
+			// mark routine as done
+			wg.Done()
+
+			// Drain reader
+			io.Copy(ioutil.Discard, pr)
+
+			// close reader
+			// pr.CloseWithError(err)
+			pr.Close()
+		}(i, v, pr, pw)
+	}
+
+	// copy the data in a multiwriter
+	mw := io.MultiWriter(writers...)
+	_, err := io.Copy(mw, r)
+	if err != nil {
+		return err
+	}
+
+	wg.Wait()
+	if len(errs) == len(vv) {
+		// Everything errored
+		msgs := make([]string, len(errs))
+		for i, e := range errs {
+			msgs[i] = fmt.Sprint(e)
+		}
+		return errors.New(strings.Join(msgs, ", "))
+	}
+	return nil
 }
 
 func (c *Client) RegisterRequestTimestamp(t time.Time) {

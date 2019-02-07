@@ -139,19 +139,19 @@ func (r *ProjectsPostRequest) SetRequestBody(body ProjectsPostRequestBody) {
 	r.requestBody = body
 }
 
-func (r *ProjectsPostRequest) NewResponseBody() *ProjectsPostResponseBody {
-	return &ProjectsPostResponseBody{}
+func (r *ProjectsPostRequest) NewResponseBody() *AppResponse {
+	return &AppResponse{}
 }
 
-type ProjectsPostResponseBody struct {
-	AppResponse
-}
+// type ProjectsPostResponseBody struct {
+// 	AppResponse
+// }
 
 func (r *ProjectsPostRequest) URL() url.URL {
 	return r.client.GetEndpointURL("projects", r.PathParams())
 }
 
-func (r *ProjectsPostRequest) Do() (ProjectsPostResponseBody, error) {
+func (r *ProjectsPostRequest) Do() (AppResponse, error) {
 	// Create http request
 	req, err := r.client.NewRequest(nil, r.Method(), r.URL(), r.RequestBody())
 	if err != nil {
