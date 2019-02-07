@@ -46,6 +46,11 @@ func (i *Int) UnmarshalJSON(data []byte) error {
 		return err
 	}
 
+	if str == "" {
+		*i = 0
+		return nil
+	}
+
 	realInt, err = strconv.Atoi(str)
 	if err != nil {
 		return err

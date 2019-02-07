@@ -263,12 +263,20 @@ func (c *Client) Do(req *http.Request, responseBody interface{}) (*http.Response
 		if c.disallowUnknownFields {
 			dec.DisallowUnknownFields()
 		}
+
 		err = dec.Decode(responseBody)
 		if err != nil && err != io.EOF {
 			// create a simple error response
 			errorResponse := &ErrorResponse{Response: httpResp}
-			errorResponse.Errors = append(errorResponse.Errors, err)
+			// errorResponse.Errors = append(errorResponse.Errors, err)
 			return httpResp, errorResponse
+		}
+	}
+
+	appResponse, ok := responseBody.(AppResponse)
+	if ok {
+		if len(appResponse.Errors) > 0 {
+			return httpResp, appResponse.Errors
 		}
 	}
 
@@ -322,8 +330,7 @@ func CheckResponse(r *http.Response) error {
 
 	err := checkContentType(r)
 	if err != nil {
-		errorResponse.Errors = append(errorResponse.Errors, errors.New(r.Status))
-		return errorResponse
+		return errors.New(r.Status)
 	}
 
 	// read data and copy it back
@@ -340,8 +347,7 @@ func CheckResponse(r *http.Response) error {
 	// convert json to struct
 	err = json.Unmarshal(data, errorResponse)
 	if err != nil {
-		errorResponse.Errors = append(errorResponse.Errors, err)
-		return errorResponse
+		return err
 	}
 
 	return errorResponse
@@ -351,49 +357,60 @@ type ErrorResponse struct {
 	// HTTP response that caused this error
 	Response *http.Response `json:"-"`
 
-	Errors []error
+	Err struct {
+		Message string `json:"message"`
+		Code    string `json:"code"`
+		Type    string `json:"type"`
+	} `json:"error"`
 }
 
-// {"error":"Addon API not installed!"}
+type AppResponse struct {
+	// HTTP response that caused this error
+	Response *http.Response `json:"-"`
 
-func (r *ErrorResponse) UnmarshalJSON(data []byte) error {
-	tmp := struct {
-		Error string `json:"error"`
-	}{}
+	Errors     Errors            `json:"errors"`
+	ResultID   string            `json:"resultid"`
+	ReturnVars interface{}       `json:"returnvars"`
+	Object     string            `json:"object"`
+	Warnings   map[string]string `json:"warnings"`
+}
+
+type Errors map[string]string
+
+func (errs Errors) Error() string {
+	err := []string{}
+	for k, v := range errs {
+		err = append(err, fmt.Sprintf("%s: %s", k, v))
+	}
+
+	return strings.Join(err, ", ")
+}
+
+func (r *AppResponse) UnmarshalJSON(data []byte) error {
+	type Alias AppResponse
+	tmp := []Alias{}
 
 	err := json.Unmarshal(data, &tmp)
 	if err != nil {
 		return err
 	}
 
-	if tmp.Error != "" {
-		r.Errors = append(r.Errors, errors.New(tmp.Error))
+	if len(tmp) == 1 {
+		*r = AppResponse(tmp[0])
+		return nil
 	}
 
-	return nil
+	if len(tmp) > 1 {
+		return errors.New("Too many elements in AppResponse")
+	}
+	return errors.New("Too little elements in AppResponse")
 }
 
-func (r ErrorResponse) Error() string {
-	if len(r.Errors) > 0 {
-		str := []string{}
-		for _, err := range r.Errors {
-			str = append(str, err.Error())
-		}
-		return strings.Join(str, ", ")
-	}
+// {"error":{"message":"key [currency] doesn't exist","code":"0","type":"expression"}}
+// [{"errors":{},"resultid":"63759415-E3B7-408D-A648-A4F2036E51E3","returnvars":{},"object":"projectactiviteit","warnings":{}}]
 
-	switch r.Response.StatusCode {
-	case 401:
-		return "The Client Key parameter is missing or is incorrectly entered."
-	case 404:
-		return "The requested resource does not exist."
-	case 406:
-		return "The :document-id provided is in an invalid state."
-	case 422:
-		return "Some parameters were incorrect."
-	}
-
-	return fmt.Sprintf("Unknown status code %d", r.Response.StatusCode)
+func (r *ErrorResponse) Error() string {
+	return fmt.Sprintf("%s: %s (%s)", r.Err.Code, r.Err.Message, r.Err.Type)
 }
 
 func checkContentType(response *http.Response) error {

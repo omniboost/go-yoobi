@@ -77,7 +77,7 @@ func (s *Client) NewEmployeesPostRequestBody() EmployeesPostRequestBody {
 type EmployeesPostRequestBody struct {
 	EmployeeNumber        string       `json:"employeenumber"`
 	BSN                   string       `json:"bsn"`
-	DateOfBirth           Date         `json:"dateofbirth"`
+	DateOfBirth           *Date        `json:"dateofbirth"`
 	FirstName             string       `json:"firstname"`
 	Initials              string       `json:"initials"`
 	Infix                 string       `json:"infix"`
@@ -85,15 +85,15 @@ type EmployeesPostRequestBody struct {
 	Gender                string       `json:"gender"`
 	EmployeeAbbr          string       `json:"employeeabbr"`
 	JobName               string       `json:"jobname"`
-	StartRegistrationDate Date         `json:"startregistrationdate"`
+	StartRegistrationDate *Date        `json:"startregistrationdate"`
 	StartDate             Date         `json:"startdate"`
-	EndDate               Date         `json:"enddate"`
+	EndDate               *Date        `json:"enddate"`
 	CostCenter            string       `json:"costcenter"`
 	CostUnit              string       `json:"costunit"`
 	AllowOvertime         Bool         `json:"allowovertime"`
 	Department            Department   `json:"department"`
 	State                 string       `json:"state"`
-	User                  User         `json:"user"`
+	User                  *User        `json:"user,omitempty"`
 	CustomFields          CustomFields `json:"customfields"`
 }
 
@@ -110,8 +110,7 @@ func (r *EmployeesPostRequest) NewResponseBody() *EmployeesPostResponseBody {
 }
 
 type EmployeesPostResponseBody struct {
-	Metadata Metadata  `json:"metadata"`
-	Results  Employees `json:"results"`
+	AppResponse
 }
 
 func (r *EmployeesPostRequest) URL() url.URL {

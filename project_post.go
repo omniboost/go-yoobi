@@ -83,15 +83,15 @@ type ProjectsPostRequestBody struct {
 	Label          string `json:"label"`
 	Classification string `json:"classification"`
 	Customer       struct {
-		Code string `json:"code"`
+		Code string `json:"code,omitempty"`
 	}
 	Department struct {
-		Name string `json:"name"`
+		Name string `json:"name,omitempty"`
 	}
 	LedgerAccount string       `json:"ledgeraccount"`
 	CostCenter    string       `json:"costcenter"`
 	CostUnit      string       `json:"costunit"`
-	Currency      string       `json:"currency"`
+	Currency      string       `json:"currency,omitempty"`
 	ProjectRoles  ProjectRoles `json:"projectroles"`
 	Activities    Activities   `json:"activities"`
 	CustomFields  CustomFields `json:"customfields"`
@@ -144,8 +144,7 @@ func (r *ProjectsPostRequest) NewResponseBody() *ProjectsPostResponseBody {
 }
 
 type ProjectsPostResponseBody struct {
-	Metadata Metadata `json:"metadata"`
-	Results  Projects `json:"results"`
+	AppResponse
 }
 
 func (r *ProjectsPostRequest) URL() url.URL {
