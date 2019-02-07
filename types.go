@@ -128,3 +128,14 @@ type Project struct {
 	StartDate      Date      `json:"startdate"`
 	Self           URL       `json:"self"`
 }
+
+type Customers []Customer
+
+type Customer struct {
+	CustomerID   uuid.UUID `json:"customerid"`
+	CustomerCode string    `json:"customercode"`
+	Name         string    `json:"name"`
+	Description  string    `json:"description"`
+	State        string    `json:"state"`
+	Self         URL       `json:"self"`
+}
