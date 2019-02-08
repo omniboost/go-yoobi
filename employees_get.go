@@ -30,7 +30,7 @@ func (c *Client) NewEmployeesGetQueryParams() *EmployeesGetQueryParams {
 }
 
 type EmployeesGetQueryParams struct {
-	CurrentPage int    `schema:"currentpage"`
+	CurrentPage int    `schema:"currentpage,omitempty"`
 	Status      string `schema:"status,omitempty"`
 }
 

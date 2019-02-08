@@ -30,7 +30,7 @@ func (c *Client) NewProjectsGetQueryParams() *ProjectsGetQueryParams {
 }
 
 type ProjectsGetQueryParams struct {
-	CurrentPage int    `schema:"currentpage"`
+	CurrentPage int    `schema:"currentpage,omitempty"`
 	Status      string `schema:"status,omitempty"`
 }
 
