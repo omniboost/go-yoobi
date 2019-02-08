@@ -19,8 +19,8 @@ func TestProjectsPostTest(t *testing.T) {
 	client.SetDebug(true)
 	client.SetDisallowUnknownFields(true)
 
-	req := client.NewProjectsPostRequest()
-	req.SetRequestBody(yoobi.ProjectsPostRequestBody{
+	req := client.NewCustomersPostRequest()
+	req.SetRequestBody(yoobi.CustomersPostRequestBody{
 		Name: "sagrosync test",
 		Code: "12",
 	})

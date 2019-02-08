@@ -75,26 +75,22 @@ func (s *Client) NewProjectsPostRequestBody() ProjectsPostRequestBody {
 }
 
 type ProjectsPostRequestBody struct {
-	Name           string `json:"name"`
-	Code           string `json:"code"`
-	State          string `json:"state"`
-	StartDate      Date   `json:"startdate"`
-	EndDate        Date   `json:"enddate"`
-	Label          string `json:"label"`
-	Classification string `json:"classification"`
-	Customer       struct {
-		Code string `json:"code,omitempty"`
-	}
-	Department struct {
-		Name string `json:"name,omitempty"`
-	}
-	LedgerAccount string       `json:"ledgeraccount"`
-	CostCenter    string       `json:"costcenter"`
-	CostUnit      string       `json:"costunit"`
-	Currency      string       `json:"currency,omitempty"`
-	ProjectRoles  ProjectRoles `json:"projectroles"`
-	Activities    Activities   `json:"activities"`
-	CustomFields  CustomFields `json:"customfields"`
+	Name           string            `json:"name"`
+	Code           string            `json:"code"`
+	State          string            `json:"state"`
+	StartDate      Date              `json:"startdate"`
+	EndDate        Date              `json:"enddate"`
+	Label          string            `json:"label"`
+	Classification string            `json:"classification"`
+	Customer       ProjectCustomer   `json:"customer"`
+	Department     ProjectDepartment `json:"department"`
+	LedgerAccount  string            `json:"ledgeraccount"`
+	CostCenter     string            `json:"costcenter"`
+	CostUnit       string            `json:"costunit"`
+	Currency       string            `json:"currency,omitempty"`
+	ProjectRoles   ProjectRoles      `json:"projectroles"`
+	Activities     Activities        `json:"activities"`
+	CustomFields   CustomFields      `json:"customfields"`
 }
 
 type ProjectRoles []ProjectRole
@@ -167,4 +163,12 @@ func (r *ProjectsPostRequest) Do() (AppResponse, error) {
 	responseBody := r.NewResponseBody()
 	_, err = r.client.Do(req, responseBody)
 	return *responseBody, err
+}
+
+type ProjectCustomer struct {
+	Code string `json:"code,omitempty"`
+}
+
+type ProjectDepartment struct {
+	Name string `json:"name,omitempty"`
 }
