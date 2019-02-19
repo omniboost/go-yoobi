@@ -20,6 +20,26 @@ type Employee struct {
 	Infix          string    `json:"infix"`
 }
 
+type EmployeeContracts []EmployeeContract
+
+type EmployeeContract struct {
+	PersNum    string `json:"pers_num"`
+	ContractNr string `json:"contractnr"`
+	StartDatum *Date  `json:"startdatum"`
+	EindDatum  *Date  `json:"einddatum"`
+	Type       string `json:"type"`
+	FTE        string `json:"fte"`
+	Notitie    string `json:"notitie"`
+	WeekAantal string `json:"week_aantal"`
+	Maandag1   string `json:"maandag1"`
+	Dinsdag1   string `json:"dinsdag1"`
+	Woensdag1  string `json:"woensdag1"`
+	Donderdag1 string `json:"donderdag1"`
+	Vrijdag1   string `json:"vrijdag1"`
+	Zaterdag1  string `json:"zaterdag1"`
+	Zondag1    string `json:"zondag1"`
+}
+
 type Bool bool
 
 func (b Bool) MarshalJSON() ([]byte, error) {
