@@ -104,6 +104,9 @@ type Date struct {
 }
 
 func (d Date) MarshalJSON() ([]byte, error) {
+	if d.IsZero() {
+		return json.Marshal("")
+	}
 	return json.Marshal(d.Format("02-01-2006"))
 }
 

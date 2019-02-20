@@ -85,9 +85,9 @@ type EmployeesPostRequestBody struct {
 	Gender                string       `json:"gender"`
 	EmployeeAbbr          string       `json:"employeeabbr"`
 	JobName               string       `json:"jobname"`
-	StartRegistrationDate *Date        `json:"startregistrationdate"`
+	StartRegistrationDate Date         `json:"startregistrationdate"`
 	StartDate             Date         `json:"startdate"`
-	EndDate               *Date        `json:"enddate"`
+	EndDate               Date         `json:"enddate"`
 	CostCenter            string       `json:"costcenter"`
 	CostUnit              string       `json:"costunit"`
 	AllowOvertime         Bool         `json:"allowovertime"`
