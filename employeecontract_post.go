@@ -52,10 +52,13 @@ func (c *Client) NewEmployeeContractsPostPathParams() *EmployeeContractsPostPath
 }
 
 type EmployeeContractsPostPathParams struct {
+	Number string `schema:"number,omitempty"`
 }
 
 func (p *EmployeeContractsPostPathParams) Params() map[string]string {
-	return map[string]string{}
+	return map[string]string{
+		"number": p.Number,
+	}
 }
 
 func (r *EmployeeContractsPostRequest) PathParams() *EmployeeContractsPostPathParams {
@@ -80,16 +83,16 @@ type EmployeeContractsPostRequestBody struct {
 	StartDatum *Date  `json:"startdatum"`
 	EindDatum  *Date  `json:"einddatum"`
 	Type       string `json:"type"`
-	FTE        string `json:"fte"`
+	FTE        int    `json:"fte"`
 	Notitie    string `json:"notitie"`
-	WeekAantal string `json:"week_aantal"`
-	Maandag1   string `json:"maandag1"`
-	Dinsdag1   string `json:"dinsdag1"`
-	Woensdag1  string `json:"woensdag1"`
-	Donderdag1 string `json:"donderdag1"`
-	Vrijdag1   string `json:"vrijdag1"`
-	Zaterdag1  string `json:"zaterdag1"`
-	Zondag1    string `json:"zondag1"`
+	WeekAantal int    `json:"week_aantal"`
+	Maandag1   int    `json:"maandag1"`
+	Dinsdag1   int    `json:"dinsdag1"`
+	Woensdag1  int    `json:"woensdag1"`
+	Donderdag1 int    `json:"donderdag1"`
+	Vrijdag1   int    `json:"vrijdag1"`
+	Zaterdag1  int    `json:"zaterdag1"`
+	Zondag1    int    `json:"zondag1"`
 }
 
 func (r *EmployeeContractsPostRequest) RequestBody() *EmployeeContractsPostRequestBody {
@@ -109,7 +112,7 @@ func (r *EmployeeContractsPostRequest) NewResponseBody() *AppResponse {
 // }
 
 func (r *EmployeeContractsPostRequest) URL() url.URL {
-	return r.client.GetEndpointURL("employeeContract", r.PathParams())
+	return r.client.GetEndpointURL("employeeContract/{{.number}}", r.PathParams())
 }
 
 func (r *EmployeeContractsPostRequest) Do() (AppResponse, error) {

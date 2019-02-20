@@ -28,16 +28,16 @@ type EmployeeContract struct {
 	StartDatum *Date  `json:"startdatum"`
 	EindDatum  *Date  `json:"einddatum"`
 	Type       string `json:"type"`
-	FTE        string `json:"fte"`
+	FTE        int    `json:"fte"`
 	Notitie    string `json:"notitie"`
-	WeekAantal string `json:"week_aantal"`
-	Maandag1   string `json:"maandag1"`
-	Dinsdag1   string `json:"dinsdag1"`
-	Woensdag1  string `json:"woensdag1"`
-	Donderdag1 string `json:"donderdag1"`
-	Vrijdag1   string `json:"vrijdag1"`
-	Zaterdag1  string `json:"zaterdag1"`
-	Zondag1    string `json:"zondag1"`
+	WeekAantal int    `json:"week_aantal"`
+	Maandag1   int    `json:"maandag1"`
+	Dinsdag1   int    `json:"dinsdag1"`
+	Woensdag1  int    `json:"woensdag1"`
+	Donderdag1 int    `json:"donderdag1"`
+	Vrijdag1   int    `json:"vrijdag1"`
+	Zaterdag1  int    `json:"zaterdag1"`
+	Zondag1    int    `json:"zondag1"`
 }
 
 type Bool bool

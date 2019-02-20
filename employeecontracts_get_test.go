@@ -20,7 +20,10 @@ func TestEmployeeContractsGet(t *testing.T) {
 	client.SetDisallowUnknownFields(true)
 
 	req := client.NewEmployeeContractsGetRequest()
-	req.QueryParams().CurrentPage = 2
+
+	req.QueryParams().CurrentPage = 0
+
+	req.PathParams().Number = "129990013"
 
 	// req.PathParams().Date = time.Date(2018, 12, 5, 0, 0, 0, 0, time.UTC)
 	resp, err := req.Do()

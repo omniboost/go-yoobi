@@ -55,10 +55,13 @@ func (c *Client) NewEmployeeContractsGetPathParams() *EmployeeContractsGetPathPa
 }
 
 type EmployeeContractsGetPathParams struct {
+	Number string `schema:"number,omitempty"`
 }
 
 func (p *EmployeeContractsGetPathParams) Params() map[string]string {
-	return map[string]string{}
+	return map[string]string{
+		"number": p.Number,
+	}
 }
 
 func (r *EmployeeContractsGetRequest) PathParams() *EmployeeContractsGetPathParams {
@@ -94,11 +97,11 @@ func (r *EmployeeContractsGetRequest) NewResponseBody() *EmployeeContractsGetRes
 
 type EmployeeContractsGetResponseBody struct {
 	Metadata Metadata          `json:"metadata"`
-	Results  EmployeeContracts `json:"results"`
+	Results  EmployeeContracts `json:"contracts"`
 }
 
 func (r *EmployeeContractsGetRequest) URL() url.URL {
-	return r.client.GetEndpointURL("employees", r.PathParams())
+	return r.client.GetEndpointURL("employeeContract/{{.number}}", r.PathParams())
 }
 
 func (r *EmployeeContractsGetRequest) Do() (EmployeeContractsGetResponseBody, error) {
