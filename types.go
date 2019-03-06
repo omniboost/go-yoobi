@@ -86,7 +86,8 @@ func (i Int) MarshalJSON() ([]byte, error) {
 }
 
 type Department struct {
-	Name string `json:"name"`
+	Name string `json:"name,omitempty"`
+	Code string `json:"code,omitempty"`
 }
 
 type User struct {
